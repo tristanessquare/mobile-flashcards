@@ -5,7 +5,7 @@ export default class DeckDetails extends React.Component {
 
   render() {
     return (
-            <View>
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
               <Text>Deck Details component</Text>
             </View>
     )
