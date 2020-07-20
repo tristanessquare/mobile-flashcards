@@ -28,6 +28,7 @@ class DecksStackScreen extends React.Component {
 }
 
 export default class App extends React.Component {
+
   render() {
     return (
             <Provider store={createStore(reducer)}>
@@ -59,4 +60,5 @@ export default class App extends React.Component {
     )
   }
 }
+
 
