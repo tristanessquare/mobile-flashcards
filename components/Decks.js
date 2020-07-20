@@ -1,6 +1,5 @@
 import React from "react"
-import {Text, TouchableOpacity, View} from "react-native"
-import {FlatList} from "react-native-web"
+import {FlatList, Text, TouchableOpacity, View} from "react-native"
 import {connect} from 'react-redux'
 import {fetchDecks} from "../utils/api"
 import {receiveDecks} from "../actions"
@@ -27,7 +26,7 @@ class Decks extends React.Component {
               <FlatList
                       data={this.props.decks}
                       renderItem={({item}) =>
-                              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                              <View key={item.deckId} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                 <TouchableOpacity onPress={() => {
                                   this.showDeckDetails(item.deckId)
                                 }}>
