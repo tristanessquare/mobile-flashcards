@@ -24,12 +24,12 @@ export function createCard({deckId, card}) {
           })
 }
 
-export function deleteDeck(deckId) {
+export function removeDeck(deckId) {
   return AsyncStorage.getItem(DECKS_STORAGE_KEY)
           .then((results) => {
             const data = JSON.parse(results)
             data[deckId] = undefined
-            delete data[key]
+            delete data[deckId]
             AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data))
           })
 }

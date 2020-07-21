@@ -26,15 +26,16 @@ class Decks extends React.Component {
               <FlatList
                       data={this.props.decks}
                       renderItem={({item}) =>
-                              <View key={item.deckId} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                 <TouchableOpacity onPress={() => {
                                   this.showDeckDetails(item.deckId)
-                                }}>
+                                }} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                   <Text>{item.deckName}</Text>
                                   <Text>{item.cards.length + ' Cards'}</Text>
                                 </TouchableOpacity>
                               </View>
                       }
+                      keyExtractor={item => item.deckId}
               />
             </View>
     )

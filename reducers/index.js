@@ -25,7 +25,7 @@ function entries(state = {}, action) {
       }
     case DELETE_DECK :
       return {
-        ...(state.keys
+        ...(Object.keys(state)
                 .filter(deckId => deckId !== action.deckId)
                 .map(deckId => state[deckId]))
       }

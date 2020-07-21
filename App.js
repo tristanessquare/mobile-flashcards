@@ -10,6 +10,7 @@ import DeckDetails from "./components/DeckDetails"
 import AddDeck from "./components/AddDeck"
 import Quiz from "./components/Quiz"
 import {Ionicons} from '@expo/vector-icons'
+import AddCard from "./components/AddCard"
 
 const DecksStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +21,7 @@ class DecksStackScreen extends React.Component {
             <DecksStack.Navigator>
               <DecksStack.Screen name="Decks" component={Decks}/>
               <DecksStack.Screen name="Deck Details" component={DeckDetails}/>
-              <DecksStack.Screen name="Add Deck" component={AddDeck}/>
+              <DecksStack.Screen name="Add Card" component={AddCard}/>
               <DecksStack.Screen name="Quiz" component={Quiz}/>
             </DecksStack.Navigator>
     )
