@@ -1,8 +1,9 @@
 import React from "react"
-import {Text, TouchableOpacity, View} from "react-native"
+import {StyleSheet, Text, View} from "react-native"
 import {connect} from "react-redux"
 import {removeDeck} from "../utils/api"
 import {deleteDeck} from "../actions"
+import Button from "./Button"
 
 class DeckDetails extends React.Component {
 
@@ -30,21 +31,14 @@ class DeckDetails extends React.Component {
   render() {
     const numOfCards = this.props.deck.cards ? this.props.deck.cards.length : 0
     return (
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Text>{this.props.deck.deckName}</Text>
-              <Text>{numOfCards + ' cards'}</Text>
+            <View style={styles.container}>
+              <Text style={styles.headerText}>{this.props.deck.deckName}</Text>
+              <Text style={{marginBottom: 20}}>{numOfCards + ' cards'}</Text>
 
-              <TouchableOpacity onPress={this.goToAddCard}>
-                <Text>Add Card</Text>
-              </TouchableOpacity>
+              <Button onPress={this.goToAddCard} text="Add Card"/>
+              <Button onPress={this.goToQuiz} disabled={numOfCards === 0} text="Start Quiz"/>
+              <Button onPress={this.deleteDeck} text="Delete Deck"/>
 
-              <TouchableOpacity onPress={this.goToQuiz} disabled={numOfCards === 0}>
-                <Text>Start Quiz</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={this.deleteDeck}>
-                <Text>Delete Deck</Text>
-              </TouchableOpacity>
             </View>
     )
   }
@@ -60,3 +54,15 @@ function mapStateToProps(state, {route}) {
 }
 
 export default connect(mapStateToProps)(DeckDetails)
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: 30
+  },
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 15
+  }
+});

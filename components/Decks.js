@@ -1,5 +1,5 @@
 import React from "react"
-import {FlatList, Text, TouchableOpacity, View} from "react-native"
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native"
 import {connect} from 'react-redux'
 import {fetchDecks} from "../utils/api"
 import {receiveDecks} from "../actions"
@@ -22,15 +22,15 @@ class Decks extends React.Component {
 
   render() {
     return (
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={styles.container}>
               <FlatList
                       data={this.props.decks}
                       renderItem={({item}) =>
-                              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                              <View style={styles.listItem}>
                                 <TouchableOpacity onPress={() => {
                                   this.showDeckDetails(item.deckId)
                                 }} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                                  <Text>{item.deckName}</Text>
+                                  <Text style={styles.headerText}>{item.deckName}</Text>
                                   <Text>{item.cards.length + ' Cards'}</Text>
                                 </TouchableOpacity>
                               </View>
@@ -54,3 +54,23 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(Decks)
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listItem: {
+    margin: 1,
+    padding: 10,
+    backgroundColor: "#FFF",
+    width: "100%",
+    flex: 1,
+    alignSelf: "center",
+    flexDirection: "row",
+    borderRadius: 2
+  },
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 15
+  }
+});

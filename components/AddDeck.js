@@ -1,9 +1,10 @@
 import React from "react"
-import {Text, TextInput, TouchableOpacity, View} from "react-native"
+import {StyleSheet, TextInput, View} from "react-native"
 import {connect} from "react-redux"
 import {uuidv4} from "../utils/helpers"
 import {createDeck} from "../utils/api"
 import {addDeck} from "../actions"
+import Button from "./Button"
 
 class AddDeck extends React.Component {
 
@@ -30,10 +31,8 @@ class AddDeck extends React.Component {
   render() {
     return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <TextInput onChangeText={this.changeText} value={this.state.deckName}/>
-              <TouchableOpacity onPress={this.addDeck} disabled={this.state.deckName === ''}>
-                <Text>Add Deck</Text>
-              </TouchableOpacity>
+              <TextInput onChangeText={this.changeText} value={this.state.deckName} style={styles.input}/>
+              <Button text="Add Deck" onPress={this.addDeck} disabled={this.state.deckName === ''}/>
             </View>
     )
   }
@@ -41,3 +40,12 @@ class AddDeck extends React.Component {
 }
 
 export default connect()(AddDeck)
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+  },
+});

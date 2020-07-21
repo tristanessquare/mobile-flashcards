@@ -1,8 +1,9 @@
 import React from 'react'
-import {Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {StyleSheet, TextInput, View} from 'react-native'
 import {connect} from "react-redux"
 import {createCard} from "../utils/api"
 import {addCard} from "../actions"
+import Button from "./Button"
 
 class AddCard extends React.Component {
 
@@ -36,12 +37,10 @@ class AddCard extends React.Component {
   render() {
     return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <TextInput onChangeText={this.changeTextQuestion} value={this.state.question}/>
-              <TextInput onChangeText={this.changeTextAnswer} value={this.state.answer}/>
+              <TextInput onChangeText={this.changeTextQuestion} value={this.state.question} style={styles.input}/>
+              <TextInput onChangeText={this.changeTextAnswer} value={this.state.answer} style={styles.input}/>
 
-              <TouchableOpacity onPress={this.addCard} disabled={this.state.question === '' || this.state.answer === ''}>
-                <Text>Add Card</Text>
-              </TouchableOpacity>
+              <Button text="Add Card" onPress={this.addCard} disabled={this.state.question === '' || this.state.answer === ''}/>
             </View>
     )
   }
@@ -49,3 +48,14 @@ class AddCard extends React.Component {
 }
 
 export default connect()(AddCard)
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10
+  },
+});
+
+
