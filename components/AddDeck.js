@@ -1,5 +1,5 @@
 import React from "react"
-import {StyleSheet, TextInput, View} from "react-native"
+import {StyleSheet, Text, TextInput, View} from "react-native"
 import {connect} from "react-redux"
 import {uuidv4} from "../utils/helpers"
 import {createDeck} from "../utils/api"
@@ -30,7 +30,8 @@ class AddDeck extends React.Component {
 
   render() {
     return (
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center', padding: 20}}>
+              <Text style={styles.label}>Deckname</Text>
               <TextInput onChangeText={this.changeText} value={this.state.deckName} style={styles.input}/>
               <Button text="Add Deck" onPress={this.addDeck} disabled={this.state.deckName === ''}/>
             </View>
@@ -48,4 +49,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
   },
+  label: {
+    fontSize: 12
+  }
 });

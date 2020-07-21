@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, TextInput, View} from 'react-native'
+import {StyleSheet, Text, TextInput, View} from 'react-native'
 import {connect} from "react-redux"
 import {createCard} from "../utils/api"
 import {addCard} from "../actions"
@@ -36,9 +36,12 @@ class AddCard extends React.Component {
 
   render() {
     return (
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <TextInput onChangeText={this.changeTextQuestion} value={this.state.question} style={styles.input}/>
-              <TextInput onChangeText={this.changeTextAnswer} value={this.state.answer} style={styles.input}/>
+            <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center', padding: 20}}>
+              <Text style={styles.label}>Question</Text>
+              <TextInput label="Question" onChangeText={this.changeTextQuestion} value={this.state.question} style={styles.input}/>
+
+              <Text style={styles.label}>Answer</Text>
+              <TextInput label="Answer" onChangeText={this.changeTextAnswer} value={this.state.answer} style={styles.input}/>
 
               <Button text="Add Card" onPress={this.addCard} disabled={this.state.question === '' || this.state.answer === ''}/>
             </View>
@@ -56,6 +59,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10
   },
+  label: {
+    fontSize: 12
+  }
 });
 
 

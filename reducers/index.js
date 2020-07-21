@@ -24,11 +24,10 @@ function entries(state = {}, action) {
         },
       }
     case DELETE_DECK :
-      return {
-        ...(Object.keys(state)
-                .filter(deckId => deckId !== action.deckId)
-                .map(deckId => state[deckId]))
-      }
+      const newState = Object.assign({}, state)
+      newState[action.deckId] = undefined
+      delete newState[action.deckId]
+      return newState
     default :
       return state
   }
