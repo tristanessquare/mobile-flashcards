@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import {AsyncStorage} from 'react-native'
-import * as Constants from "expo-constants"
+import Constants from 'expo-constants';
 
 export const DECKS_STORAGE_KEY = 'MobileFlashcards:decks'
 const NOTIFICATION_KEY = 'MobileFlashcards:notifications'
@@ -16,12 +16,13 @@ export function uuidv4() {
 
 // see UdaciFitness App
 export function clearLocalNotification() {
-  return AsyncStorage.removeItem(NOTIFICATION_KEY)
-          .then(() => {
-            if (Constants.default.isDevice) {
-              return Notifications.cancelAllScheduledNotificationsAsync()
-            }
-          })
+  if (!Constants.platform.web) {
+    return AsyncStorage.removeItem(NOTIFICATION_KEY)
+            .then(() => Notifications.cancelAllScheduledNotificationsAsync())
+  } else {
+    return Promise.resolve()
+  }
+
 }
 
 function scheduleQuizNotificationIfGranted(status) {
@@ -30,30 +31,29 @@ function scheduleQuizNotificationIfGranted(status) {
   }
 
   Notifications.cancelAllScheduledNotificationsAsync()
-          .then(() => {
-            return Notifications.scheduleNotificationAsync(
-                    {
-                      content: createNotification(),
-                      trigger: {
-                        repeats: true,
-                        seconds: 120,
-                      }
+          .then(() => Notifications.scheduleNotificationAsync(
+                  {
+                    content: createNotification(),
+                    trigger: {
+                      hour: 10,
+                      minute: 0,
+                      repeats: true,
                     }
-            )
-          })
+                  })
+          )
           .then(() => AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true)))
 }
 
 export function setLocalNotification() {
-  if (Constants.default.isDevice) {
+  if (!Constants.platform.web) {
     AsyncStorage.getItem(NOTIFICATION_KEY)
             .then(JSON.parse)
             .then((data) => {
               if (data === null) {
-                Permissions.getAsync(Permissions.NOTIFICATIONS)
+                Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
                         .then(({status}) => {
                           if (status !== 'granted') {
-                            Permissions.askAsync(Permissions.NOTIFICATIONS)
+                            Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS)
                                     .then(({status}) => scheduleQuizNotificationIfGranted(status))
                           } else {
                             scheduleQuizNotificationIfGranted(status)
@@ -67,10 +67,19 @@ export function setLocalNotification() {
 
 function createNotification() {
   return {
-    title: 'Do your daily Quiz!',
-    body: "Please do your daily quiiiiizzzz!",
-    sound: true,
+    title: 'Do not forget your daily Quiz!',
+    body: "Lets get it on and quiz everything you can!",
     vibrate: true,
     priority: 'high',
   }
+}
+
+export function registerNotificationHandler() {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 }

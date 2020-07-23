@@ -57,7 +57,8 @@ class Quiz extends React.Component {
     const currentCard = this.props.cards[this.state.currentQuestion]
 
     if (this.state.currentView === 'Answer') {
-      return <QuizAnswer deckName={this.props.deckName} answer={currentCard.answer} handleClickCorrect={this.doAnswer(true)} handleClickIncorrect={this.doAnswer(false)}/>
+      return <QuizAnswer deckName={this.props.deckName} answer={currentCard.answer} handleClickCorrect={() => this.doAnswer(true)}
+                         handleClickIncorrect={() => this.doAnswer(false)}/>
     } else if (this.state.currentView === 'Question') {
       return <QuizQuestion deckName={this.props.deckName} question={currentCard.question} handleClickShowAnswer={this.showAnswer}/>
     } else {
