@@ -3,7 +3,7 @@ import {connect} from "react-redux"
 import QuizAnswer from "./QuizAnswer"
 import QuizResult from "./QuizResult"
 import QuizQuestion from "./QuizQuestion"
-import {clearLocalNotification, setLocalNotification} from "../utils/helpers"
+import {storeQuizCompletedDate} from "../utils/helpers"
 
 class Quiz extends React.Component {
 
@@ -30,8 +30,7 @@ class Quiz extends React.Component {
       currentView: oldState.currentQuestion === this.props.cards.length - 1 ? 'Result' : 'Question',
     }), () => {
       if (this.state.currentView === 'Result') {
-        clearLocalNotification()
-                .then(setLocalNotification)
+        storeQuizCompletedDate()
       }
     })
   }

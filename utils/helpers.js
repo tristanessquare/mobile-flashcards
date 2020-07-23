@@ -4,7 +4,7 @@ import {AsyncStorage} from 'react-native'
 import Constants from 'expo-constants';
 
 export const DECKS_STORAGE_KEY = 'MobileFlashcards:decks'
-const NOTIFICATION_KEY = 'MobileFlashcards:notifications'
+const QUIZ_COMPLETED_DATE_KEY = 'MobileFlashcards:quizcompleteddate'
 
 export function uuidv4() {
   // https://stackoverflow.com/questions/105034/how-to-create-guid-uuid
@@ -14,18 +14,27 @@ export function uuidv4() {
   });
 }
 
-// see UdaciFitness App
-export function clearLocalNotification() {
-  if (!Constants.platform.web) {
-    return AsyncStorage.removeItem(NOTIFICATION_KEY)
-            .then(() => Notifications.cancelAllScheduledNotificationsAsync())
-  } else {
-    return Promise.resolve()
-  }
-
+export function storeQuizCompletedDate() {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  return AsyncStorage.setItem(QUIZ_COMPLETED_DATE_KEY, JSON.stringify(today))
 }
 
-function scheduleQuizNotificationIfGranted(status) {
+async function quizCompletedToday() {
+  const quizCompletedDateString = await AsyncStorage.getItem(QUIZ_COMPLETED_DATE_KEY)
+
+  if (!quizCompletedDateString || quizCompletedDateString === '') {
+    return false;
+  }
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const todayString = JSON.stringify(today)
+
+  return todayString === quizCompletedDateString
+}
+
+function scheduleDailyQuizNotificationIfGranted(status) {
   if (status !== 'granted') {
     return
   }
@@ -35,34 +44,27 @@ function scheduleQuizNotificationIfGranted(status) {
                   {
                     content: createNotification(),
                     trigger: {
-                      hour: 10,
+                      hour: 18,
                       minute: 0,
                       repeats: true,
                     }
                   })
           )
-          .then(() => AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true)))
 }
 
 export function setLocalNotification() {
-  if (!Constants.platform.web) {
-    AsyncStorage.getItem(NOTIFICATION_KEY)
-            .then(JSON.parse)
-            .then((data) => {
-              if (data === null) {
-                Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
-                        .then(({status}) => {
-                          if (status !== 'granted') {
-                            Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS)
-                                    .then(({status}) => scheduleQuizNotificationIfGranted(status))
-                          } else {
-                            scheduleQuizNotificationIfGranted(status)
-                          }
-                        })
-
-              }
-            })
+  if (Constants.platform.web) {
+    return
   }
+  Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
+          .then(({status}) => {
+            if (status !== 'granted') {
+              Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS)
+                      .then(({status}) => scheduleDailyQuizNotificationIfGranted(status))
+            } else {
+              scheduleDailyQuizNotificationIfGranted(status)
+            }
+          })
 }
 
 function createNotification() {
@@ -77,7 +79,7 @@ function createNotification() {
 export function registerNotificationHandler() {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
+      shouldShowAlert: !(await quizCompletedToday()),
       shouldPlaySound: false,
       shouldSetBadge: false,
     }),
