@@ -3,6 +3,7 @@ import {connect} from "react-redux"
 import QuizAnswer from "./QuizAnswer"
 import QuizResult from "./QuizResult"
 import QuizQuestion from "./QuizQuestion"
+import {clearLocalNotification, setLocalNotification} from "../utils/helpers"
 
 class Quiz extends React.Component {
 
@@ -20,23 +21,19 @@ class Quiz extends React.Component {
     }))
   }
 
-  markAsCorrect = () => {
+  doAnswer = (answerValue) => {
     this.setState((oldState) => ({
       ...oldState,
-      correctAnswers: oldState.correctAnswers + 1,
+      correctAnswers: answerValue ? oldState.correctAnswers + 1 : oldState.correctAnswers,
       showAnswer: false,
       currentQuestion: oldState.currentQuestion === this.props.cards.length - 1 ? oldState.currentQuestion : oldState.currentQuestion + 1,
       currentView: oldState.currentQuestion === this.props.cards.length - 1 ? 'Result' : 'Question',
-    }))
-  }
-
-  markAsIncorrect = () => {
-    this.setState((oldState) => ({
-      ...oldState,
-      showAnswer: false,
-      currentQuestion: oldState.currentQuestion === this.props.cards.length - 1 ? oldState.currentQuestion : oldState.currentQuestion + 1,
-      currentView: oldState.currentQuestion === this.props.cards.length - 1 ? 'Result' : 'Question',
-    }))
+    }), () => {
+      if (this.state.currentView === 'Result') {
+        clearLocalNotification()
+                .then(setLocalNotification)
+      }
+    })
   }
 
   reset = () => {
@@ -60,7 +57,7 @@ class Quiz extends React.Component {
     const currentCard = this.props.cards[this.state.currentQuestion]
 
     if (this.state.currentView === 'Answer') {
-      return <QuizAnswer deckName={this.props.deckName} answer={currentCard.answer} handleClickCorrect={this.markAsCorrect} handleClickIncorrect={this.markAsIncorrect}/>
+      return <QuizAnswer deckName={this.props.deckName} answer={currentCard.answer} handleClickCorrect={this.doAnswer(true)} handleClickIncorrect={this.doAnswer(false)}/>
     } else if (this.state.currentView === 'Question') {
       return <QuizQuestion deckName={this.props.deckName} question={currentCard.question} handleClickShowAnswer={this.showAnswer}/>
     } else {

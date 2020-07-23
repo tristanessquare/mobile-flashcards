@@ -11,6 +11,7 @@ import AddDeck from "./components/AddDeck"
 import Quiz from "./components/Quiz"
 import {Ionicons} from '@expo/vector-icons'
 import AddCard from "./components/AddCard"
+import {setLocalNotification} from "./utils/helpers"
 
 const DecksStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +30,10 @@ class DecksStackScreen extends React.Component {
 }
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    setLocalNotification()
+  }
 
   render() {
     return (
