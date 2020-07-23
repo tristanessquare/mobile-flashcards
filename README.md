@@ -1,4 +1,4 @@
-# Drawer navigation example
+# Mobile Flashcards
 
 <p>
   <!-- iOS -->
@@ -12,9 +12,21 @@
 ## 🚀 How to use
 
 - Install with `yarn` or `npm install`.
-- Run `expo start` to try it out.
+- Run `yarn start` to try it out.
+- Run `yarn ios` to try it out with ios emulator.
+- Run `yarn android` to try it out with android emulator.
 
-## 📝 Notes
+## 📝 Whats the purpose of Mobile Flashcards
 
-- This is a very basic example from the [react navigation](https://reactnavigation.org/) docs.
-- [Drawer navigation documentation](https://reactnavigation.org/docs/drawer-based-navigation).
+The Mobile Flashcards app makes your learning process great again:
+
+- Create your own decks of custom flashcards (with question and answers)
+- Quiz yourself and improve your knowledge every day
+- The Mobile Flashcard app motivates you every day by notifying you and pushing you to do your daily quiz
+
+## How is it implemented
+
+The Mobile Flashcards app makes use react-native (https://reactnative.dev/), redux (https://redux.js.org/) and the expo framework (https://expo.io/).
+
+
+
